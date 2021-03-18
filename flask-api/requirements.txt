@@ -1,0 +1,9 @@
+opencv-python
+ffmpeg 
+libsm6 
+libxext6
+pytessaract
+numpy
+pandas
+matplotlib
+PIL
