@@ -15,25 +15,28 @@ export default class App extends Component {
   };
 
   
+
   componentDidMount(){
     // console.log(this.step)
     const results = {"steps": [], "init": []} 
-    fetch('/hello')
+    fetch('/api/')
     .then(res => res.json())
     .then(data => {
-      results.steps.push(data["refined"]); 
-      this.final.push(data["final"]);
+      console.log(data)
+      results.steps.push(data["steps"]); 
+      results.init.push(data["init"]); 
+      // this.final.push(data["final"]);
       this.setState({
       row: [...this.state.row],
       col: [...this.state.col],
-      elements: data["init"]
-    })})
+      elements: data["init"]})
+    })
     .catch(e => console.log(e))
     
     this.step = results.steps
     
     
-    console.log(results.init[0]);
+    console.log(results);
   };
 
   state = {
