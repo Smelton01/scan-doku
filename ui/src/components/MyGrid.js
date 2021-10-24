@@ -1,8 +1,10 @@
 import React from 'react';
-import SubRow from "./SubRow";
+import Cell from './Cell';
 
 export default function MyGrid(props) {
     return props.col.map((col) => (
-        <SubRow elements={props.elements} row={props.row} col={col}/>
+        props.row.map((li) => 
+            <Cell elements={props.elements} col={col} row={li}/>
+        )
     ));
 }

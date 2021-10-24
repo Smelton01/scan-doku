@@ -1,3 +1,4 @@
+# %% impports
 import cv2
 import numpy as np
 import pandas as pd
@@ -38,12 +39,12 @@ kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
 # Use vertical kernel to detect and save the vertical lines in a jpg
 image_1 = cv2.erode(img_bin, ver_kernel, iterations=3)
 vertical_lines = cv2.dilate(image_1, ver_kernel, iterations=3)
-cv2.imwrite("/Users/marius/Desktop/vertical.jpg", vertical_lines)
+cv2.imwrite("./vertical.jpg", vertical_lines)
 # Plot the generated image
 plotting = plt.imshow(image_1, cmap='gray')
 plt.show()
 
-# Use horizontal kernel to detect and save the horizontal lines in a jpg
+# %%  Use horizontal kernel to detect and save the horizontal lines in a jpg
 image_2 = cv2.erode(img_bin, hor_kernel, iterations=3)
 horizontal_lines = cv2.dilate(image_2, hor_kernel, iterations=3)
 cv2.imwrite("/Users/marius/Desktop/horizontal.jpg", horizontal_lines)
@@ -51,20 +52,20 @@ cv2.imwrite("/Users/marius/Desktop/horizontal.jpg", horizontal_lines)
 plotting = plt.imshow(image_2, cmap='gray')
 plt.show()
 
-# Combine horizontal and vertical lines in a new third image, with both having same weight.
+# %% Combine horizontal and vertical lines in a new third image, with both having same weight.
 img_vh = cv2.addWeighted(vertical_lines, 0.5, horizontal_lines, 0.5, 0.0)
 # Eroding and thesholding the image
 img_vh = cv2.erode(~img_vh, kernel, iterations=2)
 thresh, img_vh = cv2.threshold(
     img_vh, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-cv2.imwrite("/Users/marius/Desktop/img_vh.jpg", img_vh)
+cv2.imwrite("./img_vh.jpg", img_vh)
 bitxor = cv2.bitwise_xor(img, img_vh)
 bitnot = cv2.bitwise_not(bitxor)
 # Plotting the generated image
 plotting = plt.imshow(bitnot, cmap='gray')
 plt.show()
 
-# Detect contours for following box detection
+# %% Detect contours for following box detection
 contours, hierarchy = cv2.findContours(
     img_vh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -89,7 +90,7 @@ def sort_contours(cnts, method="left-to-right"):
     return (cnts, boundingBoxes)
 
 
-# Sort all the contours by top to bottom.
+# %% Sort all the contours by top to bottom.
 contours, boundingBoxes = sort_contours(contours, method="top-to-bottom")
 
 # Creating a list of heights for all detected boxes
@@ -110,7 +111,7 @@ for c in contours:
 plotting = plt.imshow(image, cmap='gray')
 plt.show()
 
-# Creating two lists to define row and column in which cell is located
+# %% Creating two lists to define row and column in which cell is located
 row = []
 column = []
 j = 0
@@ -139,7 +140,7 @@ for i in range(len(box)):
 print(column)
 print(row)
 
-# calculating maximum number of cells
+# %%calculating maximum number of cells
 countcol = 0
 for i in range(len(row)):
     countcol = len(row[i])
@@ -153,7 +154,7 @@ center = [int(row[i][j][0]+row[i][j][2]/2)
 center = np.array(center)
 center.sort()
 print(center)
-# Regarding the distance to the columns center, the boxes are arranged in respective order
+# %% Regarding the distance to the columns center, the boxes are arranged in respective order
 
 finalboxes = []
 for i in range(len(row)):
@@ -168,7 +169,7 @@ for i in range(len(row)):
     finalboxes.append(lis)
 
 
-# from every single image-based cell/box the strings are extracted via pytesseract and stored in a list
+# %% from every single image-based cell/box the strings are extracted via pytesseract and stored in a list
 outer = []
 for i in range(len(finalboxes)):
     for j in range(len(finalboxes[i])):
@@ -200,4 +201,8 @@ dataframe = pd.DataFrame(arr.reshape(len(row), countcol))
 print(dataframe)
 data = dataframe.style.set_properties(align="left")
 # Converting it in a excel-file
-data.to_excel("/Users/marius/Desktop/output.xlsx")
+# data.to_excel("./output.xlsx")
+
+# %%
+print(arr)
+# %%
