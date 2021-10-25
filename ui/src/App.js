@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { Component, useState, useEffect, useLayoutEffect } from 'react'
 import './App.css';
 import MyGrid from "./components/MyGrid";
 import { Container, Row, Col } from 'react-flexybox';
@@ -10,16 +10,17 @@ export default function App() {
   const [init, setInit] = useState([])
 
   const initGrid = (arr) => {
-    var newList = elements
+    var newList = Array(81).fill(0)
     arr.forEach(step => {
       var [index, val] = step
       
       newList[index] = val
       
     })
+
     setElements(() => newList)
   }
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetch('/api/')
     .then(res => res.json())
     .then(data => {
@@ -29,18 +30,14 @@ export default function App() {
     })
     .catch(e => console.log(e))
   },[]) 
+
   const results = {"steps": [], "init": []} 
 
   const animate = (arr) => {
     arr.forEach((step, i) => 
-    // var elems = 
-    // console.log(f, i)
     setTimeout(()=>{
-      var newList = steps
       var [index, val] = step
-      newList[index] = val
-      setElements((e) => [...e.slice(0, index), val, e.slice(index+1)])
-      console.log(index, val)
+      setElements((e) => [...e.slice(0, index), val, ...e.slice(index+1)])
 
     }, i*1))
   }
@@ -52,14 +49,14 @@ export default function App() {
                   <MyGrid elements={elements} row={[0,1,2,3,4,5,6,7,8]} col={[0,1,2,3,4,5,6,7,8]}/>
                 </div>
         </Container>
-        <Button onClick={()=>this.animateSolution(this.step)} 
+        <Button onClick={()=>initGrid(init)} 
             style={{
             background: "cadetblue",
             color: "white",
             fontWeight: "bold",
             marginTop: "15px",
             marginRight: "15px"
-        }}>Solve it!</Button>
+        }}>Init</Button>
         <Button onClick={()=>this.fastSolution(this.step)} 
             style={{
             background: "cadetblue",
@@ -75,7 +72,7 @@ export default function App() {
             fontWeight: "bold",
             marginTop: "15px",
             marginLeft: "15px"
-        }}>Init</Button>
+        }}>Solve it!</Button>
       </div>
   )
 }
