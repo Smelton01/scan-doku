@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { Container, Row, Col } from 'react-flexybox';
-import {Animate} from "react-simple-animate"
 
 
 export default function Cell(props) {

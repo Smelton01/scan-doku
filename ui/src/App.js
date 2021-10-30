@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useLayoutEffect } from 'react'
 import './App.css';
 import MyGrid from "./components/MyGrid";
 import { Container, Row, Col } from 'react-flexybox';
@@ -30,8 +30,6 @@ export default function App() {
     })
     .catch(e => console.log(e))
   },[]) 
-
-  const results = {"steps": [], "init": []} 
 
   const animate = (arr) => {
     arr.forEach((step, i) => 
