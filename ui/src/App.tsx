@@ -1,17 +1,19 @@
 import React, { useState, useLayoutEffect } from 'react'
 import './App.css';
-import MyGrid from "./components/MyGrid";
-import { Container, Row, Col } from 'react-flexybox';
-import { Button } from '@material-ui/core';
+// import { Container, Row, Col } from 'react-flexybox';
+import { Button, Container } from '@material-ui/core';
+import MyGrid from './components/MyGrid';
+
 
 export default function App() {
   const [elements, setElements] = useState(Array(81).fill(0))
   const [steps, setSteps] = useState([])
   const [init, setInit] = useState([])
+  const [final, setFinal] = useState([])
 
-  const initGrid = (arr) => {
+  const initGrid = (arr: number[][]) => {
     var newList = Array(81).fill(0)
-    arr.forEach(step => {
+    arr.forEach((step: number[]) => {
       var [index, val] = step
       
       newList[index] = val
@@ -27,12 +29,13 @@ export default function App() {
       setSteps(() => data["steps"])
       setInit(() => data["init"])
       initGrid(data["init"])
+      setFinal(() => data["final"])
     })
     .catch(e => console.log(e))
   },[]) 
 
-  const animate = (arr) => {
-    arr.forEach((step, i) => 
+  const animate = (arr: number[][]) => {
+    arr.forEach((step: number[], i: number) => 
     setTimeout(()=>{
       var [index, val] = step
       setElements((e) => [...e.slice(0, index), val, ...e.slice(index+1)])
@@ -40,10 +43,14 @@ export default function App() {
     }, i*1))
   }
 
+  const quickSolve = (elements: number[]) => {
+    setElements(()=>elements)
+  }
+
   return (
       <div className="App">
         <Container style={boxStyle}>
-                <div flex style={{ display: "grid", gridTemplateColumns: `repeat(9, 60px)`}}>
+                <div style={{ display: "grid", gridTemplateColumns: `repeat(9, 60px)`}}>
                   <MyGrid elements={elements} row={[0,1,2,3,4,5,6,7,8]} col={[0,1,2,3,4,5,6,7,8]}/>
                 </div>
         </Container>
@@ -55,7 +62,7 @@ export default function App() {
             marginTop: "15px",
             marginRight: "15px"
         }}>Init</Button>
-        <Button onClick={()=>this.fastSolution(this.step)} 
+        <Button onClick={()=>quickSolve(final)} 
             style={{
             background: "cadetblue",
             color: "white",
