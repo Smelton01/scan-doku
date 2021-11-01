@@ -28,6 +28,7 @@ func main() {
 
 	s := &handler.Server{
 		Steps: testGrid.Steps,
+		Final: testGrid.Elements,
 	}
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api").Subrouter()
